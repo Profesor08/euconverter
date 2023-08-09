@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "ic2:flux_generator_mv"
+    }
+  ],
+  "result": {
+    "item": "euconverter:mv_converter"
+  }
+}

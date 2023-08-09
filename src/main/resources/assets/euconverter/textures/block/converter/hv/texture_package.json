@@ -1,0 +1,8 @@
+{
+  "down": "euconverter:block/converter/hv/out",
+  "east": "euconverter:block/converter/hv/out",
+  "north": "euconverter:block/converter/hv/out",
+  "south": "euconverter:block/converter/hv/in",
+  "up": "euconverter:block/converter/hv/out",
+  "west": "euconverter:block/converter/hv/out"
+}
