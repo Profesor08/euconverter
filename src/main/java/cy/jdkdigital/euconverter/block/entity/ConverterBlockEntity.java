@@ -21,30 +21,24 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class ConverterBlockEntity extends BaseEnergyStorageTileEntity
 {
-    private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> new EnergyStorage(100000));
+    private LazyOptional<IEnergyStorage> energyHandler;
     @NetworkInfo
     public int production;
 
     public ConverterBlockEntity(BlockPos pPos, BlockState pBlockState, int tier, int output, int maxEnergy) {
         super(pPos, pBlockState, tier, output, maxEnergy);
         this.production = output;
-    }
-
-    @Override
-    public BlockEntityType<?> createType() {
-        return EUConverter.LV_CONVERTER_BLOCK_ENTITY.get();
+        energyHandler = LazyOptional.of(() -> new EnergyStorage(maxEnergy * 4));
     }
 
     @Override
     public void onTick() {
         super.onTick();
 
-        boolean active = this.gainEnergy();
-        if (active) {
+        if (this.gainEnergy()) {
             this.updateGuiField("energy");
         }
-
-        this.setActive(active);
+        this.setActive(this.energy > 0);
     }
 
     public boolean gainEnergy() {
@@ -67,7 +61,7 @@ public abstract class ConverterBlockEntity extends BaseEnergyStorageTileEntity
 
     @Override
     public boolean canEmitEnergy(IEnergyAcceptor acceptor, Direction side) {
-        return this.isActive() && (this.getFacing() != side);
+        return this.getFacing() != side;
     }
 
     @Override
@@ -81,9 +75,9 @@ public abstract class ConverterBlockEntity extends BaseEnergyStorageTileEntity
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
-        if (tag.contains("energy")) {
+        if (tag.contains("fe")) {
             getCapability(ForgeCapabilities.ENERGY).ifPresent(handler -> {
-                ((EnergyStorage) handler).deserializeNBT(tag.get("energy"));
+                ((EnergyStorage) handler).deserializeNBT(tag.get("fe"));
             });
         }
     }
@@ -92,7 +86,7 @@ public abstract class ConverterBlockEntity extends BaseEnergyStorageTileEntity
     public void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
         getCapability(ForgeCapabilities.ENERGY).ifPresent(handler -> {
-            tag.put("energy", ((EnergyStorage) handler).serializeNBT());
+            tag.put("fe", ((EnergyStorage) handler).serializeNBT());
         });
     }
 
@@ -109,5 +103,24 @@ public abstract class ConverterBlockEntity extends BaseEnergyStorageTileEntity
     @Override
     public int getGuiOffset() {
         return 0;
+    }
+
+    @Override
+    public void setFacing(Direction facing) {
+        super.setFacing(facing);
+        if (this.energyHandler != null) {
+            this.energyHandler.invalidate();
+            this.energyHandler = LazyOptional.of(() -> new EnergyStorage(maxEnergy * 4));
+            this.addToTick();
+        }
+    }
+
+    @Override
+    public void onUnloaded(boolean chunk) {
+        if (this.energyHandler != null) {
+            this.energyHandler.invalidate();
+            this.energyHandler = null;
+        }
+        super.onUnloaded(chunk);
     }
 }

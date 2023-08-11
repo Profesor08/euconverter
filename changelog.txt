@@ -1,0 +1,4 @@
+1.19.2-1.0.3
+
+- Added capability invalidation
+- Fixed converters not outputting sometimes
