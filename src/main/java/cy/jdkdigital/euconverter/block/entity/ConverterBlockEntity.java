@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class ConverterBlockEntity extends BaseEnergyStorageTileEntity
 {
+    private EnergyStorage storage;
     private LazyOptional<IEnergyStorage> energyHandler;
     @NetworkInfo
     public int production;
@@ -28,7 +29,8 @@ public abstract class ConverterBlockEntity extends BaseEnergyStorageTileEntity
     public ConverterBlockEntity(BlockPos pPos, BlockState pBlockState, int tier, int output, int maxEnergy) {
         super(pPos, pBlockState, tier, output, maxEnergy);
         this.production = output;
-        energyHandler = LazyOptional.of(() -> new EnergyStorage(maxEnergy * 4));
+        this.storage = new EnergyStorage(maxEnergy * 4);
+        energyHandler = LazyOptional.of(() -> storage);
     }
 
     @Override
@@ -43,16 +45,13 @@ public abstract class ConverterBlockEntity extends BaseEnergyStorageTileEntity
 
     public boolean gainEnergy() {
         if (this.needsEnergy()) {
-            this.energyHandler.ifPresent(h -> {
-                int possibleAddedPower = Math.min(this.production, h.getEnergyStored() / Config.SERVER.conversionRate.get());
-                int addedPower = Math.min(this.maxEnergy - this.energy, possibleAddedPower);
-                this.energy = this.energy + addedPower;
-                h.extractEnergy(addedPower * Config.SERVER.conversionRate.get(), false);
-            });
+            int possibleAddedPower = Math.min(this.production, this.storage.getEnergyStored() / Config.SERVER.conversionRate.get());
+            int addedPower = Math.min(this.maxEnergy - this.energy, possibleAddedPower);
+            this.energy = this.energy + addedPower;
+            this.storage.extractEnergy(addedPower * Config.SERVER.conversionRate.get(), false);
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     public boolean needsEnergy() {
@@ -75,19 +74,13 @@ public abstract class ConverterBlockEntity extends BaseEnergyStorageTileEntity
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
-        if (tag.contains("fe")) {
-            getCapability(ForgeCapabilities.ENERGY).ifPresent(handler -> {
-                ((EnergyStorage) handler).deserializeNBT(tag.get("fe"));
-            });
-        }
+        storage.deserializeNBT(tag.get("fe"));
     }
 
     @Override
     public void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
-        getCapability(ForgeCapabilities.ENERGY).ifPresent(handler -> {
-            tag.put("fe", ((EnergyStorage) handler).serializeNBT());
-        });
+        tag.put("fe", storage.serializeNBT());
     }
 
     @Override
@@ -110,7 +103,7 @@ public abstract class ConverterBlockEntity extends BaseEnergyStorageTileEntity
         super.setFacing(facing);
         if (this.energyHandler != null) {
             this.energyHandler.invalidate();
-            this.energyHandler = LazyOptional.of(() -> new EnergyStorage(maxEnergy * 4));
+            this.energyHandler = LazyOptional.of(() -> storage);
             this.addToTick();
         }
     }
