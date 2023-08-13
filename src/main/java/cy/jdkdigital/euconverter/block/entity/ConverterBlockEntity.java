@@ -3,6 +3,7 @@ package cy.jdkdigital.euconverter.block.entity;
 import cy.jdkdigital.euconverter.Config;
 import cy.jdkdigital.euconverter.EUConverter;
 import ic2.api.energy.tile.IEnergyAcceptor;
+import ic2.api.energy.tile.IEnergyEmitter;
 import ic2.api.network.buffer.NetworkInfo;
 import ic2.core.block.base.tiles.impls.BaseEnergyStorageTileEntity;
 import net.minecraft.core.BlockPos;
@@ -64,6 +65,11 @@ public abstract class ConverterBlockEntity extends BaseEnergyStorageTileEntity
     }
 
     @Override
+    public boolean canAcceptEnergy(IEnergyEmitter emitter, Direction side) {
+        return false;
+    }
+
+    @Override
     public <T> @NotNull LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
         if (cap == ForgeCapabilities.ENERGY && (side == null || side.equals(getBlockState().getValue(DirectionalBlock.FACING)))) {
             return energyHandler.cast();
@@ -74,7 +80,9 @@ public abstract class ConverterBlockEntity extends BaseEnergyStorageTileEntity
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
-        storage.deserializeNBT(tag.get("fe"));
+        if (tag.contains("fe")) {
+            storage.deserializeNBT(tag.get("fe"));
+        }
     }
 
     @Override

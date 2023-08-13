@@ -1,6 +1,6 @@
 {
-    "block.euconverter.lv_converter": "FE to EU Converter (LV)",
-    "block.euconverter.mv_converter": "FE to EU Converter (MV)",
-    "block.euconverter.hv_converter": "FE to EU Converter (HV)",
+    "block.euconverter.lv_converter": "LV Flux Converter",
+    "block.euconverter.mv_converter": "MV Flux Converter",
+    "block.euconverter.hv_converter": "HV Flux Converter",
     "euconverter.fe_to_eu_conversion": "Allows one-way conversion of FE to EU (%1$s FE = 1 EU)"
 }
