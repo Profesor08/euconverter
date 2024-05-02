@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "ic2:isu"
+    }
+  ],
+  "result": {
+    "item": "euconverter:iv_converter"
+  }
+}

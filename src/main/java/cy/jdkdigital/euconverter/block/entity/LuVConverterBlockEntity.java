@@ -5,14 +5,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class LVConverterBlockEntity extends ConverterBlockEntity
+public class LuVConverterBlockEntity extends ConverterBlockEntity
 {
-    public LVConverterBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(pPos, pBlockState, 1, 32, 40000);
+    public LuVConverterBlockEntity(BlockPos pPos, BlockState pBlockState) {
+        super(pPos, pBlockState, 3, 32768, 80000000);
     }
 
     @Override
     public BlockEntityType<?> createType() {
-        return EUConverter.LV_CONVERTER_BLOCK_ENTITY.get();
+        return EUConverter.LuV_CONVERTER_BLOCK_ENTITY.get();
     }
 }

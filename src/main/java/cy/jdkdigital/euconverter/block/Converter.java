@@ -1,5 +1,9 @@
 package cy.jdkdigital.euconverter.block;
 
+import java.util.List;
+
+import org.jetbrains.annotations.Nullable;
+
 import cy.jdkdigital.euconverter.Config;
 import cy.jdkdigital.euconverter.block.entity.ConverterBlockEntity;
 import ic2.core.block.base.blocks.BaseActivityBlock;
@@ -14,9 +18,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class Converter extends BaseActivityBlock<ConverterBlockEntity>
 {
@@ -36,6 +38,13 @@ public class Converter extends BaseActivityBlock<ConverterBlockEntity>
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable BlockGetter pLevel, List<Component> pTooltip, TooltipFlag pFlag) {
         super.appendHoverText(pStack, pLevel, pTooltip, pFlag);
+
         pTooltip.add(Component.translatable("euconverter.fe_to_eu_conversion", Config.SERVER.conversionRate.get()).withStyle(ChatFormatting.DARK_GRAY));
+
+        var item = pStack.getItem();
+
+        var pKey = ForgeRegistries.ITEMS.getKey(item).toString();
+
+        pTooltip.add(Component.translatable(pKey).withStyle(ChatFormatting.DARK_GRAY));
     }
 }

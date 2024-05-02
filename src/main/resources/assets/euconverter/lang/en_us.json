@@ -1,6 +1,15 @@
 {
-    "block.euconverter.lv_converter": "LV Flux Converter",
-    "block.euconverter.mv_converter": "MV Flux Converter",
-    "block.euconverter.hv_converter": "HV Flux Converter",
-    "euconverter.fe_to_eu_conversion": "Allows one-way conversion of FE to EU (%1$s FE = 1 EU)"
+  "block.euconverter.lv_converter": "LV Flux Converter",
+  "block.euconverter.mv_converter": "MV Flux Converter",
+  "block.euconverter.hv_converter": "HV Flux Converter",
+  "block.euconverter.ev_converter": "EV Flux Converter",
+  "block.euconverter.iv_converter": "IV Flux Converter",
+  "block.euconverter.luv_converter": "LuV Flux Converter",
+  "euconverter.fe_to_eu_conversion": "Allows one-way conversion of FE to EU (%1$s FE = 1 EU)",
+  "euconverter:lv_converter": "Outputs 32 EU/t",
+  "euconverter:mv_converter": "Outputs 128 EU/t",
+  "euconverter:hv_converter": "Outputs 512 EU/t",
+  "euconverter:ev_converter": "Outputs 2048 EU/t",
+  "euconverter:iv_converter": "Outputs 8192 EU/t",
+  "euconverter:luv_converter": "Outputs 32768 EU/t"
 }

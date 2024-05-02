@@ -1,3 +1,9 @@
+1.19.2-1.0.5
+
+- Add EV Flux Converter with 2048 EU/t output
+- Add IV Flux Converter with 8192 EU/t output
+- Add LuV Flux Converter with 32768 EU/t output
+
 1.19.2-1.0.4
 
 - Fixed energy being lost when rotating
